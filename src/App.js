@@ -10,7 +10,7 @@ function App() {
     setMsg(e.target.value);
   }
   const sendMessage = () => {
-    liff.init({liffId: process.env.REACT_APP_LIFF_ID}) // LIFF IDをセットする
+    liff.init({liffId: MY_LIFF_ID}) // LIFF IDをセットする
       .then(() => {
         if (!liff.isLoggedIn()) {
           liff.login({}) // ログインしていなければ最初にログインする
@@ -29,7 +29,7 @@ function App() {
 
   /* 追加: UserProfileをAlertで表示 */
   const getUserInfo = () => {
-    liff.init({liffId: process.env.REACT_APP_LIFF_ID})
+    liff.init({liffId: MY_LIFF_ID})
       .then(() => {
         if (!liff.isLoggedIn()) {
           liff.login({}) // ログインしていなければ最初にログインする
@@ -54,6 +54,7 @@ function App() {
           value={msg}
           onChange={handleMsgChange}
         />
+        <p>入力した情報:{msg}</p>
         <button onClick={sendMessage}>メッセージを送信</button>
         <button onClick={getUserInfo}>ユーザー情報</button>
       </header>
