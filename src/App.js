@@ -1,26 +1,61 @@
 import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 import liff from '@line/liff';
 
 function App() {
+  const [msg,setMsg] = React.useState('');
+
+  const handleMsgChange = (e) => {
+    setMsg(e.target.value);
+  }
+  const sendMessage = () => {
+    liff.init({liffId: process.env.REACT_APP_LIFF_ID}) // LIFF IDをセットする
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login({}) // ログインしていなければ最初にログインする
+        } else if (liff.isInClient()) { // LIFFので動いているのであれば
+          liff.sendMessages([{ // メッセージを送信する
+            'type': 'text',
+            'text': {msg},
+          }]).then(function() {
+            window.alert('Message sent');
+          }).catch(function(error) {
+            window.alert('Error sending message: ' + error);
+          });
+        }
+      })
+  }
+
+  /* 追加: UserProfileをAlertで表示 */
+  const getUserInfo = () => {
+    liff.init({liffId: process.env.REACT_APP_LIFF_ID})
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login({}) // ログインしていなければ最初にログインする
+        } else if (liff.isInClient()) {
+          liff.getProfile()  // ユーザ情報を取得する
+            .then(profile => {
+              const userId = profile.userId
+              const displayName = profile.displayName
+              alert(`Name: ${displayName}, userId: ${userId}`)
+            }).catch(function(error) {
+              window.alert('Error sending message: ' + error);
+            });
+        }
+      })
+
+  }
   return (
     <div className="App">
       <header className="App-header">
         <h1>イマレピ</h1>
-        <p>ブランチ切るテスト</p>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        
+        <input
+          value={msg}
+          onChange={handleMsgChange}
+        />
+        <button onClick={sendMessage}>メッセージを送信</button>
+        <button onClick={getUserInfo}>ユーザー情報</button>
       </header>
     </div>
   );
