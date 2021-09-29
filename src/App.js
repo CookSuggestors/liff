@@ -9,6 +9,7 @@ function App() {
   const handleMsgChange = (e) => {
     setMsg(e.target.value);
   }
+
   const sendMessage = () => {
     liff.ready.then(() => {
       liff.init({liffId: process.env.MY_LIFF_ID}) // LIFF IDをセットする
@@ -48,8 +49,12 @@ function App() {
           }
         })
     })
-
   }
+
+  const clickAlert = () => {
+    alert(process.env.MY_LIFF_ID);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -59,6 +64,7 @@ function App() {
           onChange={handleMsgChange}
         />
         <p>入力した情報:{msg}</p>
+        <button onClick={clickAlert}>アラートを表示</button>
         <button onClick={sendMessage}>メッセージを送信</button>
         <button onClick={getUserInfo}>ユーザー情報</button>
       </header>
