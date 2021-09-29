@@ -10,40 +10,44 @@ function App() {
     setMsg(e.target.value);
   }
   const sendMessage = () => {
-    liff.init({liffId: MY_LIFF_ID}) // LIFF IDをセットする
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login({}) // ログインしていなければ最初にログインする
-        } else if (liff.isInClient()) { // LIFFので動いているのであれば
-          liff.sendMessages([{ // メッセージを送信する
-            'type': 'text',
-            'text': {msg},
-          }]).then(function() {
-            window.alert('Message sent');
-          }).catch(function(error) {
-            window.alert('Error sending message: ' + error);
-          });
-        }
+    liff.ready.then(() => {
+      liff.init({liffId: process.env.MY_LIFF_ID}) // LIFF IDをセットする
+        .then(() => {
+          if (!liff.isLoggedIn()) {
+            liff.login({}) // ログインしていなければ最初にログインする
+          } else if (liff.isInClient()) { // LIFFので動いているのであれば
+            liff.sendMessages([{ // メッセージを送信する
+              'type': 'text',
+              'text': {msg},
+            }]).then(function() {
+              window.alert('Message sent');
+            }).catch(function(error) {
+              window.alert('Error sending message: ' + error);
+            });
+          }
+        })
       })
   }
 
   /* 追加: UserProfileをAlertで表示 */
   const getUserInfo = () => {
-    liff.init({liffId: MY_LIFF_ID})
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login({}) // ログインしていなければ最初にログインする
-        } else if (liff.isInClient()) {
-          liff.getProfile()  // ユーザ情報を取得する
-            .then(profile => {
-              const userId = profile.userId
-              const displayName = profile.displayName
-              alert(`Name: ${displayName}, userId: ${userId}`)
-            }).catch(function(error) {
-              window.alert('Error sending message: ' + error);
-            });
-        }
-      })
+    liff.ready.then(() => {
+      liff.init({liffId: process.env.MY_LIFF_ID})
+        .then(() => {
+          if (!liff.isLoggedIn()) {
+            liff.login({}) // ログインしていなければ最初にログインする
+          } else if (liff.isInClient()) {
+            liff.getProfile()  // ユーザ情報を取得する
+              .then(profile => {
+                const userId = profile.userId
+                const displayName = profile.displayName
+                alert(`Name: ${displayName}, userId: ${userId}`)
+              }).catch(function(error) {
+                window.alert('Error sending message: ' + error);
+              });
+          }
+        })
+    })
 
   }
   return (
