@@ -1,71 +1,47 @@
-import React from 'react';
-import './App.css';
 import liff from '@line/liff';
+import React, {useState, useEffect} from 'react';
+import ReactDOM from 'react-dom';
+// import * as Config from '../config';
 
 function App() {
-  const [msg,setMsg] = React.useState('');
 
-  const handleMsgChange = (e) => {
-    setMsg(e.target.value);
-  }
+    useEffect(()=>{
+        initLiff()// 初期化処理
+    }, [])
 
-  const sendMessage = () => {
-    liff.ready.then(() => {
-      liff.init({liffId: process.env.REACT_APP_LIFF_ID})
-        .then(() => {
-          if (!liff.isLoggedIn()) {
-            liff.login({})
-          } else if (liff.isInClient()) {
-            liff.sendMessages([{
-              'type': 'text',
-              'text': {msg},
-            }]).then(function() {
-              window.alert('Message sent');
-            }).catch(function(error) {
-              window.alert('Error sending message: ' + error);
-            });
-          }
-        })
-      })
-  }
+    /**
+     * LIFFの初期化を行う
+     * 初期化完了. 以降はLIFF SDKの各種機能を利用できる
+     *  =>初期化前でも使用できる機能もある（liff.isInClient()など）
+     */
+    const initLiff = () => {
+        liff.init({ liffId: process.env.REACT_APP_LIFF_ID})
+            .then(()=>{ 
+                //ログインしていなければログインさせる
+                if(liff.isLoggedIn() === false) liff.login({})
+            }).catch( (error)=> {});
+    }
 
-  const getUserInfo = () => {
-    liff.ready.then(() => {
-      liff.init({liffId: process.env.REACT_APP_LIFF_ID})
-        .then(() => {
-          if (!liff.isLoggedIn()) {
-            liff.login({})
-          } else if (liff.isInClient()) {
-            liff.getProfile()
-              .then(profile => {
-                const userId = profile.userId
-                const displayName = profile.displayName
-                alert(`Name: ${displayName}, userId: ${userId}`)
-              }).catch(function(error) {
-                window.alert('Error sending message: ' + error);
-              });
-          }
-        })
-    })
-  }
+    /**
+     * LINEで保持しているユーザー情報取得
+     */
+    const getUserInfo = () => {
+        liff.getProfile().then(profile => {
+            alert( JSON.stringify(profile) );
+        }).catch((error)=>{})
+    }
 
-  const envValue=process.env.REACT_APP_LIFF_ID;
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>イマレピ</h1>
-        <input
-          value={msg}
-          onChange={handleMsgChange}
-        />
-        <p>入力した情報:{msg}</p>
-        <p>環境変数:{envValue}</p>
-        <button onClick={sendMessage}>メッセージを送信</button>
-        <button onClick={getUserInfo}>ユーザー情報</button>
-      </header>
-    </div>
-  );
+    return (
+        <>
+            {/* LIFF内以外からアクセス */}
+            {liff.isInClient() === false ?
+                <p>ブラウザからはお使いいただけません。LINE内アプリ（LIFF）からご利用ください。</p>
+            :
+                <p>こんにちは</p>
+            }
+            {getUserInfo}
+        </>
+    );
 }
 
 export default App;
