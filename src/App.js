@@ -4,14 +4,13 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  /* 追加: メッセージ送信 */
   const sendMessage = () => {
-    liff.init({liffId: process.env.REACT_APP_LIFF_ID}) // LIFF IDをセットする
+    liff.init({liffId: process.env.REACT_APP_LIFF_ID})
       .then(() => {
         if (!liff.isLoggedIn()) {
-          liff.login({}) // ログインしていなければ最初にログインする
-        } else if (liff.isInClient()) { // LIFFので動いているのであれば
-          liff.sendMessages([{ // メッセージを送信する
+          liff.login({})
+        } else if (liff.isInClient()) {
+          liff.sendMessages([{
             'type': 'text',
             'text': "You've successfully sent a message! Hooray!"
           }]).then(function() {
@@ -23,14 +22,13 @@ function App() {
       })
   }
 
-  /* 追加: UserProfileをAlertで表示 */
   const getUserInfo = () => {
     liff.init({liffId: process.env.REACT_APP_LIFF_ID})
       .then(() => {
         if (!liff.isLoggedIn()) {
-          liff.login({}) // ログインしていなければ最初にログインする
+          liff.login({})
         } else if (liff.isInClient()) {
-          liff.getProfile()  // ユーザ情報を取得する
+          liff.getProfile()
             .then(profile => {
               const userId = profile.userId
               const displayName = profile.displayName
@@ -45,22 +43,9 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <button className="button" onClick={sendMessage}>send message</button> // 追加
-        <button className="button" onClick={getUserInfo}>show user info</button> // 追加
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>イメレピ</h1>
+      <button className="button" onClick={sendMessage}>send message</button>
+      <button className="button" onClick={getUserInfo}>show user info</button>
     </div>
   );
 }
