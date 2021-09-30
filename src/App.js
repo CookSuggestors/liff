@@ -8,7 +8,7 @@ function App() {
   const [val, setVal] = React.useState([]);
   const sendText='['+val.join(', ')+']';
 
-  const sendMessage = (text) => {  
+  const sendMessage = ({text}) => {  
     liff.init({liffId: process.env.REACT_APP_LIFF_ID})
       .then(() => {
         if (!liff.isLoggedIn()) {
