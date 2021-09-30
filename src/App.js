@@ -59,11 +59,10 @@ function App() {
           )
         })}
       </div>
-      <p>選んだ食材:{val.join(', ')}</p>
+      <p>選んだ食材:{sendText}</p>
       <div className='form'>
-        <Button variant="contained" onClick={sendMessage(sendMessage)}>送信</Button>
+        <Button variant="contained" onClick={sendMessage(sendText)}>送信</Button>
       </div>
-      <p>{sendText}</p>
     </div>
   );
 }
