@@ -1,10 +1,15 @@
 import React from 'react';
-import liff from '@line/liff'; // 追加
-import logo from './logo.svg';
+import liff from '@line/liff';
 import './App.css';
 
 function App() {
-  const sendMessage = () => {
+  const [input, setInput] = React.useState('');
+
+  const handleInputChange = (e) => {
+    setInput(e.target.event);
+  }
+
+  const sendMessage = (input) => {
     liff.init({liffId: process.env.REACT_APP_LIFF_ID})
       .then(() => {
         if (!liff.isLoggedIn()) {
@@ -12,9 +17,10 @@ function App() {
         } else if (liff.isInClient()) {
           liff.sendMessages([{
             'type': 'text',
-            'text': "You've successfully sent a message! Hooray!"
+            'text': input
           }]).then(function() {
             window.alert('Message sent');
+            setInput('');
           }).catch(function(error) {
             window.alert('Error sending message: ' + error);
           });
@@ -44,6 +50,10 @@ function App() {
   return (
     <div className="App">
       <h1>イメレピ</h1>
+      <input 
+        value={input}
+        onChange={handleInputChange}
+      />
       <button className="button" onClick={sendMessage}>send message</button>
       <button className="button" onClick={getUserInfo}>show user info</button>
     </div>
