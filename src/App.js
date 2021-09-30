@@ -8,7 +8,7 @@ function App() {
   const [val, setVal] = React.useState([]);
   const sendText='['+val.join(', ')+']';
 
-  const sendMessage = ({text}) => {  
+  const sendMessage = (text) => {  
     liff.init({liffId: process.env.REACT_APP_LIFF_ID})
       .then(() => {
         if (!liff.isLoggedIn()) {
@@ -61,7 +61,8 @@ function App() {
       </div>
       <p>選んだ食材:{sendText}</p>
       <div className='form'>
-        <Button variant="contained" onClick={sendMessage(sendText)}>送信</Button>
+        {/* <Button variant="contained" onClick={sendMessage(sendText)}>送信</Button> */}
+        <Button variant="contained" onClick={() => sendMessage(sendText)}>送信</Button>
       </div>
     </div>
   );
