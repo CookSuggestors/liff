@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 function App() {
 
   const [val, setVal] = React.useState([]);
+  const [ingredients,setIngredients] = React.useState(['野菜','フルーツ','トマト','じゃがいも','さつまいも']);
   const [add,setAdd] = React.useState('');
   const sendText='['+val.join(', ')+']';
   
@@ -32,7 +33,7 @@ function App() {
   }
   
   const addIngredient = () => {
-    ingredients.push(add);
+    setIngredients([...ingredients,add]);
     setVal([...val,add]);
     setAdd('');
   }
@@ -45,7 +46,7 @@ function App() {
   };
 
   
-  const ingredients = ['野菜','フルーツ','トマト','じゃがいも','さつまいも'];
+  
 
   return (
     <div className="App">
@@ -77,7 +78,6 @@ function App() {
       />
       <button onClick={addIngredient}>追加</button>
       <p>選んだ食材:{sendText}</p>
-      {ingredients}
       <div className='form'>
         <Button variant="contained" onClick={() => sendMessage(sendText)}>送信</Button>
       </div>
