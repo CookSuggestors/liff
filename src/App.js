@@ -11,12 +11,12 @@ function App() {
 
   const sendMessage = () => {
     liff.ready.then(() => {
-      liff.init({liffId: process.env.MY_LIFF_ID}) // LIFF IDをセットする
+      liff.init({liffId: process.env.REACT_APP_LIFF_ID})
         .then(() => {
           if (!liff.isLoggedIn()) {
-            liff.login({}) // ログインしていなければ最初にログインする
-          } else if (liff.isInClient()) { // LIFFので動いているのであれば
-            liff.sendMessages([{ // メッセージを送信する
+            liff.login({})
+          } else if (liff.isInClient()) {
+            liff.sendMessages([{
               'type': 'text',
               'text': {msg},
             }]).then(function() {
@@ -29,15 +29,14 @@ function App() {
       })
   }
 
-  /* 追加: UserProfileをAlertで表示 */
   const getUserInfo = () => {
     liff.ready.then(() => {
-      liff.init({liffId: process.env.MY_LIFF_ID})
+      liff.init({liffId: process.env.REACT_APP_LIFF_ID})
         .then(() => {
           if (!liff.isLoggedIn()) {
-            liff.login({}) // ログインしていなければ最初にログインする
+            liff.login({})
           } else if (liff.isInClient()) {
-            liff.getProfile()  // ユーザ情報を取得する
+            liff.getProfile()
               .then(profile => {
                 const userId = profile.userId
                 const displayName = profile.displayName
@@ -50,6 +49,8 @@ function App() {
     })
   }
 
+  const envValue=process.env.REACT_APP_LIFF_ID;
+
   return (
     <div className="App">
       <header className="App-header">
@@ -59,6 +60,7 @@ function App() {
           onChange={handleMsgChange}
         />
         <p>入力した情報:{msg}</p>
+        <p>環境変数:{envValue}</p>
         <button onClick={sendMessage}>メッセージを送信</button>
         <button onClick={getUserInfo}>ユーザー情報</button>
       </header>
