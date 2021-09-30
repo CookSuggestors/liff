@@ -4,9 +4,11 @@ import './App.css';
 import Button from '@mui/material/Button';
 
 function App() {
-  const [val, setVal] = React.useState([]);
 
-  const sendMessage = () => {
+  const [val, setVal] = React.useState([]);
+  const sendText='['+val.join(', ')+']';
+
+  const sendMessage = () => {  
     liff.init({liffId: process.env.REACT_APP_LIFF_ID})
       .then(() => {
         if (!liff.isLoggedIn()) {
@@ -14,7 +16,7 @@ function App() {
         } else if (liff.isInClient()) {
           liff.sendMessages([{
             'type': 'text',
-            'text': '['+{val}.join(', ')+']'
+            'text': {sendText}
           }]).then(function() {
             window.alert('Message sent');
           }).catch(function(error) {
