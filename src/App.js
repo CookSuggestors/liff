@@ -12,7 +12,7 @@ function App() {
         } else if (liff.isInClient()) {
           liff.sendMessages([{
             'type': 'text',
-            'text': val
+            'text': '['+{val}+']'
           }]).then(function() {
             window.alert('Message sent');
           }).catch(function(error) {
