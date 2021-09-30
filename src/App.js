@@ -4,6 +4,8 @@ import './App.css';
 import Button from '@mui/material/Button';
 
 function App() {
+  const [val, setVal] = React.useState([]);
+
   const sendMessage = () => {
     liff.init({liffId: process.env.REACT_APP_LIFF_ID})
       .then(() => {
@@ -12,7 +14,7 @@ function App() {
         } else if (liff.isInClient()) {
           liff.sendMessages([{
             'type': 'text',
-            'text': '['+{val}+']'
+            'text': '['+{val}.join(', ')+']'
           }]).then(function() {
             window.alert('Message sent');
           }).catch(function(error) {
@@ -21,8 +23,6 @@ function App() {
         }
       })
   }
-
-  const [val, setVal] = React.useState([]);
 
   const handleChange = e => {
     if (val.includes(e.target.value)) {
@@ -61,7 +61,6 @@ function App() {
       <div className='form'>
         <Button variant="contained" onClick={sendMessage}>送信</Button>
       </div>
-      
     </div>
   );
 }
