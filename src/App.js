@@ -20,7 +20,7 @@ function App() {
             'type': 'text',
             'text': text
           }]).then(function() {
-            window.alert('Message sent');
+            window.alert('食材を登録しました!');
           }).catch(function(error) {
             window.alert('Error sending message: ' + error);
           });
