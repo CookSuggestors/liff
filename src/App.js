@@ -6,8 +6,9 @@ import Button from '@mui/material/Button';
 function App() {
 
   const [val, setVal] = React.useState([]);
+  const [add,setAdd] = React.useState('');
   const sendText='['+val.join(', ')+']';
-
+  
   const sendMessage = (text) => {  
     liff.init({liffId: process.env.REACT_APP_LIFF_ID})
       .then(() => {
@@ -26,6 +27,15 @@ function App() {
       })
   }
 
+  const handleInputChange = e => {
+    setAdd(e.target.value);
+  }
+  
+  const addIngredient = () => {
+    ingredients.push(add);
+    setVal([...val,add]);
+    setAdd('');
+  }
   const handleChange = e => {
     if (val.includes(e.target.value)) {
       setVal(val.filter(ingredient => ingredient !== e.target.value));
@@ -33,6 +43,7 @@ function App() {
       setVal([...val, e.target.value]);
     }
   };
+
   
   const ingredients = ['野菜','フルーツ','トマト','じゃがいも','さつまいも'];
 
@@ -57,11 +68,17 @@ function App() {
               </label>
             </div>
           )
-        })}
+        })} 
+        
       </div>
+      <input
+        value={add}
+        onChange={handleInputChange}
+      />
+      <button onClick={addIngredient}>追加</button>
       <p>選んだ食材:{sendText}</p>
+      {ingredients}
       <div className='form'>
-        {/* <Button variant="contained" onClick={sendMessage(sendText)}>送信</Button> */}
         <Button variant="contained" onClick={() => sendMessage(sendText)}>送信</Button>
       </div>
     </div>
