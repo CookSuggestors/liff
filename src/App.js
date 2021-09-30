@@ -3,13 +3,13 @@ import liff from '@line/liff';
 import './App.css';
 
 function App() {
-  const [input, setInput] = React.useState('');
+  const [msg,setMsg] = React.useState('');
 
-  const handleInputChange = (e) => {
-    setInput(e.target.event);
+  const handleMsgChange = (e) => {
+    setMsg(e.target.value);
   }
 
-  const sendMessage = (input) => {
+  const sendMessage = () => {
     liff.init({liffId: process.env.REACT_APP_LIFF_ID})
       .then(() => {
         if (!liff.isLoggedIn()) {
@@ -17,10 +17,10 @@ function App() {
         } else if (liff.isInClient()) {
           liff.sendMessages([{
             'type': 'text',
-            'text': input
+            'text': msg
           }]).then(function() {
             window.alert('Message sent');
-            setInput('');
+            setMsg('');
           }).catch(function(error) {
             window.alert('Error sending message: ' + error);
           });
@@ -44,15 +44,16 @@ function App() {
             });
         }
       })
-
+    // const ingredients = ['野菜','フルーツ','じゃがいも'];
   }
-
+  
   return (
     <div className="App">
       <h1>イメレピ</h1>
-      <input 
-        value={input}
-        onChange={handleInputChange}
+      <h1>入力データ:{msg}</h1>
+      <input
+        value={msg}
+        onChange={handleMsgChange}
       />
       <button className="button" onClick={sendMessage}>send message</button>
       <button className="button" onClick={getUserInfo}>show user info</button>
