@@ -2,14 +2,43 @@ import React from 'react';
 import liff from '@line/liff';
 import './App.css';
 import Button from '@mui/material/Button';
+import axios from 'axios';
 
 function App() {
 
   const [val, setVal] = React.useState([]);
-  const [ingredients,setIngredients] = React.useState(['野菜','フルーツ','トマト','じゃがいも','さつまいも']);
+  // const [ingredients,setIngredients] = React.useState(['野菜','フルーツ','トマト','じゃがいも','さつまいも']);
+  const [ingredients,setIngredients] = React.useState([]);
   const [add,setAdd] = React.useState('');
-  const [fileUrl, setFileUrl] = React.useState(null);
+  const [image, setImage] = React.useState();
+  const [imageUrl, setImageUrl] = React.useState('');
   const sendText = val.join(', ');
+
+  const getImage = (e) => {
+    if(!e.target.files) return
+    const img = e.target.files[0]
+    setImage(img);
+    setImageUrl(URL.createObjectURL(img));
+  }
+
+const submitImage = () => {
+  const header = { headers: {
+    'Content-Type': 'application/json;charset=UTF-8',
+    "Access-Control-Allow-Origin": "*",
+  }}
+  const data = new FormData()
+  data.append('file', image)
+  //aws rekognitionのURLをセット
+  const imgUri = '任意のURL'
+  axios.post(imgUri, data, header)
+  .then(res => {
+    console.log(res.data.token);
+    //食材リストに画像解析結果のリストをセット
+    setIngredients(res.data.token);
+  }).catch(err => {
+    console.error(err.response.data.error);
+  })
+}
   
   const sendMessage = (text) => {  
     liff.init({liffId: process.env.REACT_APP_LIFF_ID})
@@ -46,11 +75,11 @@ function App() {
     }
   };
 
-  function processImage(event){
-    const imageFile = event.target.files[0];
-    const imageUrl = URL.createObjectURL(imageFile);
-    setFileUrl(imageUrl)
-  }
+  // function processImage(event){
+  //   const imageFile = event.target.files[0];
+  //   const imageUrl = URL.createObjectURL(imageFile);
+  //   setFileUrl(imageUrl)
+  // }
 
   
   
@@ -61,9 +90,18 @@ function App() {
         <h1>イメレピ</h1>
       </div>
 
-      <input type="file" accept="image/*" onChange={processImage}/>
+      <div>
+        <form>
+          　<label htmlFor="img"></label>
+          　<input id="img" type="file" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={e => getImage(e)} />
+          　<input type="button" value="画像を送信" onClick={submitImage} />
+        </form>
+      </div>
+      <br/>
+      <img src={imageUrl} height="100" width="auto"/>
+      {/* <input type="file" accept="image/*" onChange={processImage}/>
       <img src={fileUrl} height={200} width={300}/>
-      {fileUrl}
+      {fileUrl} */}
       <div className="checkBox">
         {ingredients.map((ingredient,index) => {
           return (
