@@ -33,9 +33,7 @@ function App() {
     axios
       .post(imgUri, data, header)
       .then((res) => {
-        console.log(res.data.token);
-        //食材リストに画像解析結果のリストをセット
-        setIngredients(res.data.token);
+        setIngredients(res.data);
       })
       .catch((err) => {
         console.error(err.response);
