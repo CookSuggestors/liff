@@ -8,7 +8,8 @@ function App() {
   const [val, setVal] = React.useState([]);
   const [ingredients,setIngredients] = React.useState(['野菜','フルーツ','トマト','じゃがいも','さつまいも']);
   const [add,setAdd] = React.useState('');
-  const sendText='['+val.join(', ')+']';
+  const [fileUrl, setFileUrl] = React.useState(null);
+  const sendText = val.join(', ');
   
   const sendMessage = (text) => {  
     liff.init({liffId: process.env.REACT_APP_LIFF_ID})
@@ -45,6 +46,12 @@ function App() {
     }
   };
 
+  function processImage(event){
+    const imageFile = event.target.files[0];
+    const imageUrl = URL.createObjectURL(imageFile);
+    setFileUrl(imageUrl)
+  }
+
   
   
 
@@ -53,7 +60,10 @@ function App() {
       <div className="title">
         <h1>イメレピ</h1>
       </div>
-      
+
+      <input type="file" accept="image/*" onChange={processImage}/>
+      <img src={fileUrl} height={200} width={300}/>
+      {fileUrl}
       <div className="checkBox">
         {ingredients.map((ingredient,index) => {
           return (
@@ -70,13 +80,16 @@ function App() {
             </div>
           )
         })} 
-        
       </div>
-      <input
-        value={add}
-        onChange={handleInputChange}
-      />
-      <button onClick={addIngredient}>追加</button>
+
+      <div className='addIngredient'>
+        <input
+          value={add}
+          onChange={handleInputChange}
+        />
+        <button onClick={addIngredient}>追加</button>
+      </div>
+
       <p>選んだ食材:{sendText}</p>
       <div className='form'>
         <Button variant="contained" onClick={() => sendMessage(sendText)}>送信</Button>
