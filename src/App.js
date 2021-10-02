@@ -49,7 +49,7 @@ function App() {
           .sendMessages([
             {
               type: "text",
-              text: text,
+              text: `食材: ${text}`,
             },
           ])
           .then(function () {
