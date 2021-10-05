@@ -53,7 +53,7 @@ function App() {
             },
           ])
           .then(function () {
-            window.alert("食材を登録しました!");
+            liff.closeWindow();
           })
           .catch(function (error) {
             window.alert("Error sending message: " + error);
